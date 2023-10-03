@@ -1,4 +1,4 @@
-export const crudActions = {
+export const taskActions = {
     ADD_TASK: "ADD_TASK",
     UPDATE_TASK: "UPDATE_TASK",
     REMOVE_TASK: "REMOVE_TASK",

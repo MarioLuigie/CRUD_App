@@ -63,18 +63,18 @@ export default function TaskInput() {
     const { 
         inputTaskValue, 
         setInputTaskValue,
-        setIsTaskEditing,
+        isModalOpen,
+        setIsModalOpen,
         handleChangeInputTask,
         handleAddTask,
         handleUpdateTask,
         isInputValueValid,
-        isTaskEditing
     } = useContext(TaskContext);
 
     const handleCancelEdit = (evt) => {
         evt.preventDefault();
         setInputTaskValue("");
-        setIsTaskEditing(false);
+        setIsModalOpen({...setIsModalOpen, isTaskEditing: false});
     }
 
     return (
@@ -90,7 +90,7 @@ export default function TaskInput() {
                     placeholder='Enter text'
                 />
             </div> 
-            {isTaskEditing 
+            {isModalOpen.isEditing
                 ? (<div className='buttons'>
                     <Button 
                         label={"Cancel"}

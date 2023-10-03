@@ -1,14 +1,15 @@
 import { createContext, useState, useReducer } from "react";
 import PropTypes from "prop-types";
 
-import { crudActions } from "../constans/actions";
+import { taskActions } from "../constans/actions";
 
 export const TaskContext = createContext();
 
 export default function Provider({ children }) {
     const initIsModalOpen = {
         isRemoveSelected: false,
-        isRemoveAll: false
+        isRemoveAll: false,
+        isEditing: false
     }
 
     //Init value of tasksList for taskReducer
@@ -22,7 +23,7 @@ export default function Provider({ children }) {
         UPDATE_TASK,
         REMOVE_TASK,
         REMOVE_ALL_TASKS
-    } = crudActions;
+    } = taskActions;
 
     //State for task input value - controled form
     const [inputTaskValue, setInputTaskValue] = useState("");
@@ -33,11 +34,10 @@ export default function Provider({ children }) {
     //State flag isModalOpen
     const [isModalOpen, setIsModalOpen] = useState(initIsModalOpen);
     //State flag for TaskInput - is task editing, bytton add task change to update
-    const [isTaskEditing, setIsTaskEditing] = useState(false);
+    // const [isTaskEditing, setIsTaskEditing] = useState(false);
 
     //taskReducer for tasksList - CRUD
     const taskReducer = (tasksList, action) => {
-
         const newTask = {
             textContent: action.textContent,
             id: `${Date.now()}_${Math.floor(Math.random() * 1000)}`
@@ -70,8 +70,8 @@ export default function Provider({ children }) {
     }
 
     //Function for open or close modal window
-    const toggleModal = (propsToActual) => {
-        setIsModalOpen({...isModalOpen, ...propsToActual});
+    const toggleModal = (propsToActualObj) => {
+        setIsModalOpen({...isModalOpen, ...propsToActualObj});
     }
 
     //Adding one single task to the tasks list
@@ -91,7 +91,8 @@ export default function Provider({ children }) {
         const editingTask = tasksList.find(task => task.id === selectedTaskId);
         setInputTaskValue(editingTask.textContent);
         setTaskIdToDo(selectedTaskId);
-        setIsTaskEditing(true);
+        // setIsTaskEditing(true);
+        setIsModalOpen({...isModalOpen, isEditing: true})
     }
 
     //Updating selected task
@@ -101,7 +102,8 @@ export default function Provider({ children }) {
             idToUpdate: taskIdToDo,
             editedTextContent: inputTaskValue
         });
-        setIsTaskEditing(false);
+        // setIsTaskEditing(false);
+        setIsModalOpen({...isModalOpen, isEditing: false})
         setInputTaskValue("");
     }
 
@@ -140,11 +142,10 @@ export default function Provider({ children }) {
         handleRemoveTask,
         handleRemoveConfirmTask,
         isModalOpen,
+        setIsModalOpen,
         toggleModal,
         handleRemoveAllTasks,
         handleRemoveAllConfirmTasks,
-        isTaskEditing,
-        setIsTaskEditing
     }
 
     return (

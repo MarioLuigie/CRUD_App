@@ -32,6 +32,8 @@ export default function Provider({ children }) {
     const [taskIdToDo, setTaskIdToDo] = useState("");
     //State flag isModalOpen
     const [isModalOpen, setIsModalOpen] = useState(initIsModalOpen);
+    //State flag for TaskInput - is task editing, bytton add task change to update
+    const [isTaskEditing, setIsTaskEditing] = useState(false);
 
     //taskReducer for tasksList - CRUD
     const taskReducer = (tasksList, action) => {
@@ -45,7 +47,11 @@ export default function Provider({ children }) {
             case ADD_TASK:
                 return [...tasksList, newTask];
             case UPDATE_TASK:
-                return;
+                return tasksList.map((task) => (
+                    task.id === action.idToUpdate 
+                        ? {...task, textContent: action.editedTextContent}
+                        : task
+                ));
             case REMOVE_TASK:
                 return tasksList.filter(task => task.id !== action.idToRemove);
             case REMOVE_ALL_TASKS:
@@ -80,6 +86,25 @@ export default function Provider({ children }) {
         setInputTaskValue("");
     }
 
+    //Editing selected task 
+    const handleEditTask = (selectedTaskId) => () => {
+        const editingTask = tasksList.find(task => task.id === selectedTaskId);
+        setInputTaskValue(editingTask.textContent);
+        setTaskIdToDo(selectedTaskId);
+        setIsTaskEditing(true);
+    }
+
+    //Updating selected task
+    const handleUpdateTask = () => {
+        tasksListDispatch({
+            type: UPDATE_TASK, 
+            idToUpdate: taskIdToDo,
+            editedTextContent: inputTaskValue
+        });
+        setIsTaskEditing(false);
+        setInputTaskValue("");
+    }
+
     //Opening modal window to confirm removing selected task
     const handleRemoveTask = (selectedTaskId) => () => {
         setTaskIdToDo(selectedTaskId);
@@ -105,9 +130,12 @@ export default function Provider({ children }) {
 
     const providerValues = {
         inputTaskValue,
+        setInputTaskValue,
         handleChangeInputTask,
         tasksList,
         handleAddTask,
+        handleEditTask,
+        handleUpdateTask,
         isInputValueValid,
         handleRemoveTask,
         handleRemoveConfirmTask,
@@ -115,6 +143,8 @@ export default function Provider({ children }) {
         toggleModal,
         handleRemoveAllTasks,
         handleRemoveAllConfirmTasks,
+        isTaskEditing,
+        setIsTaskEditing
     }
 
     return (

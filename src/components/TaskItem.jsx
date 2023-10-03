@@ -50,15 +50,14 @@ export default function TaskItem({
     id,
     textContent
 }) {
-
-    const { handleRemoveTask } = useContext(TaskContext);
+    const { handleRemoveTask, handleEditTask } = useContext(TaskContext);
 
     return (
         <div css={styles} id={id}>
             <p className='textContent'>{textContent}</p>
             <div className='controls'>
                 <div className='control'>
-                    <FontAwesomeIcon icon={faPenToSquare} />
+                    <FontAwesomeIcon icon={faPenToSquare} onClick={handleEditTask(id)}/>
                 </div>
                 <div className='control' onClick={handleRemoveTask(id)}>
                     <FontAwesomeIcon icon={faTrash} />

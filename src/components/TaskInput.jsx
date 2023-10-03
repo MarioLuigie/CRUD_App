@@ -50,16 +50,32 @@ const styles = (isInputValueValid) => css`
         font-size: 20px;
         color: ${colors.darkGrey};
     }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+    }
 `
 
-export default function TaskInput () {
-
+export default function TaskInput() {
     const { 
         inputTaskValue, 
+        setInputTaskValue,
+        setIsTaskEditing,
         handleChangeInputTask,
         handleAddTask,
+        handleUpdateTask,
         isInputValueValid,
+        isTaskEditing
     } = useContext(TaskContext);
+
+    const handleCancelEdit = (evt) => {
+        evt.preventDefault();
+        setInputTaskValue("");
+        setIsTaskEditing(false);
+    }
 
     return (
         <form css={styles(isInputValueValid)} onSubmit={handleAddTask}>
@@ -74,9 +90,21 @@ export default function TaskInput () {
                     placeholder='Enter text'
                 />
             </div> 
-            <Button 
-                label={"Add Task"}
-            />
+            {isTaskEditing 
+                ? (<div className='buttons'>
+                    <Button 
+                        label={"Cancel"}
+                        type="reset"
+                        onHandle={handleCancelEdit}
+                    />
+                    <Button 
+                        label={"update"}
+                        type="button"
+                        onHandle={handleUpdateTask}
+                    />
+                   </div>
+                ) : <Button label={"Add Task"} type="submit"/> 
+            }
         </form>
     )
 }

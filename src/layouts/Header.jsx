@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import PropTypes from "prop-types";
 
 import { header } from "../styles/dimensions";
+import { colors } from "../styles/colors";
 
 const styles = css`
     display: flex;
@@ -14,8 +15,8 @@ const styles = css`
     height: ${header.height}px;
 
     .label {
-        font-size: 40px;
-        color: #8d8d8d;
+        font-size: 55px;
+        color: ${colors.accentColor};
      }
 `
 

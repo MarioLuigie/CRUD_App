@@ -1,12 +1,24 @@
-import Provider from "../Store/CrudContext";
+import { useContext } from "react";
+
+import { TaskContext } from "../Store/TaskContext";
 import Container from "../layouts/Container";
+import Modal from "../UI/Modal";
+import RemoveSelected from "./Modals/RemoveSelected";
+import RemoveAll from "./Modals/RemoveAll";
 
 export default function App() {
+  const { isModalOpen } = useContext(TaskContext);
 
   return (
-    <Provider>
+    <>
+      {isModalOpen.isRemoveSelected && <Modal>
+        <RemoveSelected />
+      </Modal>}
+      {isModalOpen.isRemoveAll && <Modal>
+        <RemoveAll />
+      </Modal>}
       <Container />
-    </Provider>
+    </>
   )
 }
 

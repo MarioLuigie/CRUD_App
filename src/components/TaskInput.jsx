@@ -62,20 +62,13 @@ const styles = (isInputValueValid) => css`
 export default function TaskInput() {
     const { 
         inputTaskValue, 
-        setInputTaskValue,
         isModalOpen,
-        setIsModalOpen,
         handleChangeInputTask,
         handleAddTask,
         handleUpdateTask,
         isInputValueValid,
+        handleCancelEdit
     } = useContext(TaskContext);
-
-    const handleCancelEdit = (evt) => {
-        evt.preventDefault();
-        setInputTaskValue("");
-        setIsModalOpen({...setIsModalOpen, isTaskEditing: false});
-    }
 
     return (
         <form css={styles(isInputValueValid)} onSubmit={handleAddTask}>

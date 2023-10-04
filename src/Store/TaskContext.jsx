@@ -130,6 +130,12 @@ export default function Provider({ children }) {
         toggleModal({isRemoveAll: false});
     }
 
+    const handleCancelEdit = (evt) => {
+        evt.preventDefault();
+        setInputTaskValue("");
+        setIsModalOpen({...setIsModalOpen, isTaskEditing: false});
+    }
+
     const providerValues = {
         inputTaskValue,
         setInputTaskValue,
@@ -146,6 +152,7 @@ export default function Provider({ children }) {
         toggleModal,
         handleRemoveAllTasks,
         handleRemoveAllConfirmTasks,
+        handleCancelEdit
     }
 
     return (

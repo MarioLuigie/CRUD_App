@@ -7,9 +7,9 @@ import Provider from "./Store/TaskContext.jsx";
 import './styles/index.scss';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <Provider>
     <React.StrictMode>
-      <App />
+      <Provider>
+        <App />
+      </Provider>
     </React.StrictMode>
-  </Provider>
 )

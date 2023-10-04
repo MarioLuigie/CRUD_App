@@ -62,12 +62,12 @@ const styles = (isInputValueValid) => css`
 export default function TaskInput() {
     const { 
         inputTaskValue, 
-        isModalOpen,
         handleChangeInputTask,
         handleAddTask,
         handleUpdateTask,
         isInputValueValid,
-        handleCancelEdit
+        handleCancelEdit,
+        isTaskEditing
     } = useContext(TaskContext);
 
     return (
@@ -83,7 +83,7 @@ export default function TaskInput() {
                     placeholder='Enter text'
                 />
             </div> 
-            {isModalOpen.isEditing
+            {isTaskEditing
                 ? (<div className='buttons'>
                     <Button 
                         label={"Cancel"}

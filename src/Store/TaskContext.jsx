@@ -9,7 +9,6 @@ export default function Provider({ children }) {
     const initIsModalOpen = {
         isRemoveSelected: false,
         isRemoveAll: false,
-        isEditing: false
     }
 
     //Init value of tasksList for taskReducer
@@ -34,7 +33,7 @@ export default function Provider({ children }) {
     //State flag isModalOpen
     const [isModalOpen, setIsModalOpen] = useState(initIsModalOpen);
     //State flag for TaskInput - is task editing, bytton add task change to update
-    // const [isTaskEditing, setIsTaskEditing] = useState(false);
+    const [isTaskEditing, setIsTaskEditing] = useState(false);
 
     //taskReducer for tasksList - CRUD
     const taskReducer = (tasksList, action) => {
@@ -92,7 +91,7 @@ export default function Provider({ children }) {
         setInputTaskValue(editingTask.textContent);
         setTaskIdToDo(selectedTaskId);
         // setIsTaskEditing(true);
-        setIsModalOpen({...isModalOpen, isEditing: true})
+        setIsTaskEditing(true);
     }
 
     //Updating selected task
@@ -103,7 +102,7 @@ export default function Provider({ children }) {
             editedTextContent: inputTaskValue
         });
         // setIsTaskEditing(false);
-        setIsModalOpen({...isModalOpen, isEditing: false})
+        setIsTaskEditing(false);
         setInputTaskValue("");
     }
 
@@ -133,7 +132,7 @@ export default function Provider({ children }) {
     const handleCancelEdit = (evt) => {
         evt.preventDefault();
         setInputTaskValue("");
-        setIsModalOpen({...setIsModalOpen, isTaskEditing: false});
+        setIsTaskEditing(false);
     }
 
     const providerValues = {
@@ -152,7 +151,8 @@ export default function Provider({ children }) {
         toggleModal,
         handleRemoveAllTasks,
         handleRemoveAllConfirmTasks,
-        handleCancelEdit
+        handleCancelEdit,
+        isTaskEditing
     }
 
     return (

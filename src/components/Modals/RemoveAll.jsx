@@ -3,6 +3,7 @@
 import { css } from '@emotion/react';
 import { useContext } from "react";
 
+import { taskActions } from '../../constans/actions';
 import { TaskContext } from "../../Store/TaskContext";
 import Button from "../../UI/Button";
 
@@ -23,8 +24,24 @@ const styles = css`
     }
 `
 
-export default function RemoveAll() {
-    const { toggleModal, handleRemoveAllConfirmTasks } = useContext(TaskContext);
+export default function RemoveAll({
+    setIsRemoveAll
+}) {
+    const { tasksListDispatch } = useContext(TaskContext);
+
+    const {
+        REMOVE_ALL_TASKS
+    } = taskActions;
+
+    //Remove all confirmed tasks
+    const handleRemoveAllConfirmTasks = () => {
+        tasksListDispatch({type: REMOVE_ALL_TASKS});
+        setIsRemoveAll(false);
+    }
+
+    const handleCancel = () => {
+        setIsRemoveAll(false);
+    }
 
     return (
         <div css={styles}>
@@ -32,7 +49,7 @@ export default function RemoveAll() {
             <div className='buttons'>
                 <Button 
                     label="Cancel" 
-                    onHandle={() => toggleModal({isRemoveAll: false})}//function close modal, arg is prop for change object state for all modals-look at declaration in store
+                    onHandle={handleCancel}
                 />
                 <Button 
                     label="Done" 

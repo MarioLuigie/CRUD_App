@@ -11,7 +11,7 @@ const styles = css`
     align-items: center;
     justify-content: center;
     background-color: #38383875;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(1px);
 
     .dialogWindow {
         min-width: 350px;
@@ -39,5 +39,5 @@ export default function Modal({ children }) {
 }
 
 Modal.propTypes = {
-    children: PropTypes.node.isRequired
+    children: PropTypes.node
 }

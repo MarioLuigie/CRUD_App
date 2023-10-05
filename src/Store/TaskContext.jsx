@@ -6,17 +6,18 @@ import { taskActions } from "../constans/actions";
 export const TaskContext = createContext();
 
 export default function Provider({ children }) {
-    const initIsModalOpen = {
-        isRemoveSelected: false,
-        isRemoveAll: false,
-    }
-
-    //Init value of tasksList for taskReducer
+    //Init value of tasksList state for taskReducer
     const initTasksList = [
         {textContent: "Finish the React course.", id: "01"},
         {textContent: "Go to School.", id: "02"}
     ];
 
+    const initEditingTaskState = {
+        textContent: "",
+        id: ""
+    }
+
+    //Destructure actions from import for Reducer
     const {
         ADD_TASK,
         UPDATE_TASK,
@@ -24,14 +25,9 @@ export default function Provider({ children }) {
         REMOVE_ALL_TASKS
     } = taskActions;
 
-    //State for task input value - controled form
-    const [inputTaskValue, setInputTaskValue] = useState("");
-    //State flag for validation input value
-    const [isInputValueValid, setIsInputValueValid] = useState(true);
-    //State for task ID (actual task to do something)
-    const [taskIdToDo, setTaskIdToDo] = useState("");
-    //State flag isModalOpen
-    const [isModalOpen, setIsModalOpen] = useState(initIsModalOpen);
+    //State for task object (actual task to do something)
+    const [editingTaskState, setEditingTaskState] = useState(initEditingTaskState);
+
     //State flag for TaskInput - is task editing, bytton add task change to update
     const [isTaskEditing, setIsTaskEditing] = useState(false);
 
@@ -62,97 +58,14 @@ export default function Provider({ children }) {
 
     const [tasksList, tasksListDispatch] = useReducer(taskReducer, initTasksList);
 
-    //Onchange function for task input
-    const handleChangeInputTask = (evt) => {
-        setInputTaskValue(evt.target.value);
-        setIsInputValueValid(true);
-    }
-
-    //Function for open or close modal window
-    const toggleModal = (propsToActualObj) => {
-        setIsModalOpen({...isModalOpen, ...propsToActualObj});
-    }
-
-    //Adding one single task to the tasks list
-    const handleAddTask = (evt) => {
-        evt.preventDefault();
-        if (inputTaskValue.trim() !== "") {
-            tasksListDispatch({type: ADD_TASK, textContent: inputTaskValue});
-            setInputTaskValue("");
-        } else {
-            setIsInputValueValid(false);
-        }
-        setInputTaskValue("");
-    }
-
-    //Editing selected task 
-    const handleEditTask = (selectedTaskId) => () => {
-        const editingTask = tasksList.find(task => task.id === selectedTaskId);
-        setInputTaskValue(editingTask.textContent);
-        setTaskIdToDo(selectedTaskId);
-        // setIsTaskEditing(true);
-        setIsTaskEditing(true);
-    }
-
-    //Updating selected task
-    const handleUpdateTask = () => {
-        tasksListDispatch({
-            type: UPDATE_TASK, 
-            idToUpdate: taskIdToDo,
-            editedTextContent: inputTaskValue
-        });
-        // setIsTaskEditing(false);
-        setIsTaskEditing(false);
-        setInputTaskValue("");
-    }
-
-    //Opening modal window to confirm removing selected task
-    const handleRemoveTask = (selectedTaskId) => () => {
-        setTaskIdToDo(selectedTaskId);
-        toggleModal({isRemoveSelected: true});
-    }
-
-    //Remove confirmed task
-    const handleRemoveConfirmTask = () => {
-        tasksListDispatch({type: REMOVE_TASK, idToRemove: taskIdToDo});
-        toggleModal({isRemoveSelected: false})
-    }
-
-    //Opening modal window to confirm removing all tasks
-    const handleRemoveAllTasks = () => {
-        toggleModal({isRemoveAll: true});
-    }
-
-    //Remove all confirmed tasks
-    const handleRemoveAllConfirmTasks = () => {
-        tasksListDispatch({type: REMOVE_ALL_TASKS});
-        toggleModal({isRemoveAll: false});
-    }
-
-    const handleCancelEdit = (evt) => {
-        evt.preventDefault();
-        setInputTaskValue("");
-        setIsTaskEditing(false);
-    }
-
     const providerValues = {
-        inputTaskValue,
-        setInputTaskValue,
-        handleChangeInputTask,
         tasksList,
-        handleAddTask,
-        handleEditTask,
-        handleUpdateTask,
-        isInputValueValid,
-        handleRemoveTask,
-        handleRemoveConfirmTask,
-        isModalOpen,
-        setIsModalOpen,
-        toggleModal,
-        handleRemoveAllTasks,
-        handleRemoveAllConfirmTasks,
-        handleCancelEdit,
-        isTaskEditing
+        isTaskEditing,
+        tasksListDispatch,
+        setIsTaskEditing,
+        editingTaskState, 
+        setEditingTaskState,
+        initEditingTaskState
     }
 
     return (

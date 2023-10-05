@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from './components/App.jsx';
-import Provider from "./Store/TaskContext.jsx";
+import App from './components/App';
+import Provider from "./Store/TaskContext";
 
 import './styles/index.scss';
 

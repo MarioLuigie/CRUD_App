@@ -9,7 +9,6 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { TaskContext } from '../Store/TaskContext';
 
-
 const styles = css`
     display: flex;
     align-items: center;
@@ -48,12 +47,10 @@ const styles = css`
 
 export default function TaskItem({
     id,
-    textContent
+    textContent,
+    handleEditTask,
+    handleRemoveTask
 }) {
-    const { 
-        handleRemoveTask, 
-        handleEditTask 
-    } = useContext(TaskContext);
 
     return (
         <div css={styles} id={id}>

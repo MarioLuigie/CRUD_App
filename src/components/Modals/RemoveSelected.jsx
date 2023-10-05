@@ -3,6 +3,7 @@
 import { css } from '@emotion/react';
 import { useContext } from "react";
 
+import { taskActions } from '../../constans/actions';
 import { TaskContext } from "../../Store/TaskContext";
 import Button from "../../UI/Button";
 
@@ -23,8 +24,25 @@ const styles = css`
     }
 `
 
-export default function RemoveSelected() {
-    const { handleRemoveConfirmTask, toggleModal } = useContext(TaskContext);
+export default function RemoveSelected({
+    taskIdToRemove,
+    setIsRemoveSelected
+}) {
+    const { toggleModal, tasksListDispatch } = useContext(TaskContext);
+
+    const {
+        REMOVE_TASK
+    } = taskActions;
+
+    //Remove confirmed task
+    const handleRemoveConfirmTask = () => {
+        tasksListDispatch({type: REMOVE_TASK, idToRemove: taskIdToRemove});
+        setIsRemoveSelected(false);
+    }
+
+    const handleCancel = () => {
+        setIsRemoveSelected(false);
+    }
 
     return (
         <div css={styles}>
@@ -32,7 +50,7 @@ export default function RemoveSelected() {
             <div className='buttons'>
                 <Button 
                     label="Cancel" 
-                    onHandle={() => toggleModal({isRemoveSelected: false})}//function close modal, arg is prop for change object state for all modals-look at declaration in store
+                    onHandle={handleCancel}
                 />
                 <Button 
                     label="Done" 

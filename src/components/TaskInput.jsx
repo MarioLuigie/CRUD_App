@@ -1,8 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 // /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
+import { taskActions } from "../constans/actions";
 import { TaskContext } from "../Store/TaskContext";
 import { colors } from "../styles/colors";
 import Button from "../UI/Button";
@@ -60,22 +61,69 @@ const styles = (isInputValueValid) => css`
 `
 
 export default function TaskInput() {
+        //Init state for all inputs
+    const initInputValues = {
+        inputTaskValue: ""
+    }
+
     const { 
-        inputTaskValue, 
-        handleChangeInputTask,
-        handleAddTask,
-        handleUpdateTask,
-        isInputValueValid,
-        handleCancelEdit,
-        isTaskEditing
+        isTaskEditing,
+        tasksListDispatch,
+        setIsTaskEditing,
+        editingTaskState
     } = useContext(TaskContext);
+
+    const {
+        ADD_TASK,
+        UPDATE_TASK
+    } = taskActions;
+
+    //State flag for validation input value
+    const [isInputValueValid, setIsInputValueValid] = useState(true);
+    //State for task input value - controled form
+    const [inputValues, setInputValues] = useState(initInputValues);
+
+    //Onchange function for task input
+    const handleChangeInputTask = (evt) => {
+        setInputValues({...inputValues, inputTaskValue: evt.target.value})
+        setIsInputValueValid(true);
+    }
+
+    //Adding one single task to the tasks list
+    const handleAddTask = (evt) => {
+        evt.preventDefault();
+        if (inputValues.inputTaskValue.trim() !== "") {
+            tasksListDispatch({type: ADD_TASK, textContent: inputValues.inputTaskValue});
+            setInputValues({...inputValues, inputTaskValue: ""})
+        } else {
+            setIsInputValueValid(false);
+        }
+        setInputValues({...inputValues, inputTaskValue: ""})
+    }
+
+    //Updating selected task
+    const handleUpdateTask = () => {
+        tasksListDispatch({
+            type: UPDATE_TASK, 
+            idToUpdate: editingTaskState.id,
+            editedTextContent: inputValues.inputTaskValue
+        });
+        setIsTaskEditing(false);
+        setInputValues({...inputValues, inputTaskValue: ""})
+    }
+
+    const handleCancelEdit = (evt) => {
+        evt.preventDefault();
+        setInputValues({...inputValues, inputTaskValue: ""})
+        setIsTaskEditing(false);
+    }
 
     return (
         <form css={styles(isInputValueValid)} onSubmit={handleAddTask}>
             <div className='inputWrapper'>
                 <label htmlFor="taskInput" className='label'>Add Task</label>
                 <input 
-                    value={inputTaskValue}
+                    value={inputValues.inputTaskValue}
                     type="text" 
                     id="taskInput"
                     className='input'
